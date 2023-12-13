@@ -3,7 +3,7 @@
 \docType{data}
 \name{michels_2017}
 \alias{michels_2017}
-\title{Data on firms suffering natural disasters.}
+\title{Data on firms suffering natural disasters}
 \format{
 A tibble with 423 rows and 12 variables:
 \describe{
@@ -20,6 +20,9 @@ A tibble with 423 rows and 12 variables:
 \item{prev_fqtr}{Fiscal quarter of last period-end before event date}
 \item{recognize}{Indicator for event being recognized (next_period_end before date_filed)}
 }
+}
+\source{
+\doi{10.1111/1475-679X.12128}
 }
 \usage{
 michels_2017

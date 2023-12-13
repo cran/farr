@@ -2,9 +2,9 @@
 #'
 #'  A function returning simulated data on test_scores.
 #'
-#' @param effect_size Effect of attending camp on subsequent test scores.
-#' @param n_students Number of students in simulated data set.
-#' @param n_grades Number of grades in simulated data set.
+#' @param effect_size Effect of attending camp on subsequent test scores
+#' @param n_students Number of students in simulated data set
+#' @param n_grades Number of grades in simulated data set
 #' @param include_unobservables Include talent in returned data (TRUE or FALSE)
 #' @param random_assignment Is assignment to treatment completely random? (TRUE or FALSE)
 #'
@@ -61,7 +61,7 @@ get_test_scores <- function(effect_size = 15, n_students = 1000L,
     dplyr::mutate(treat_score = assign_score(.data$score,
                                              random_assignment = random_assignment)) %>%
     dplyr::mutate(treat = .data$treat_score > stats::median(.data$treat_score)) %>%
-    dplyr::select(.data$id, .data$treat)
+    dplyr::select("id", "treat")
 
   test_scores <-
     test_scores_pre %>%
@@ -70,8 +70,8 @@ get_test_scores <- function(effect_size = 15, n_students = 1000L,
     dplyr::mutate(score =
       dplyr::case_when(.data$treat & .data$post ~ .data$score + effect_size,
                        TRUE ~ .data$score)) %>%
-    dplyr::select(.data$id, .data$grade, .data$post, .data$treat, .data$score,
-                  .data$talent, .data$grade_effect) %>%
+    dplyr::select("id", "grade", "post", "treat", "score",
+                  "talent", "grade_effect") %>%
     dplyr::as_tibble()
 
     if (include_unobservables) {

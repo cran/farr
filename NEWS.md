@@ -1,4 +1,30 @@
-# farr
+# farr 0.2.39
+
+# farr 0.2.38
+
+* Tweaks for CRAN submission.
+
+# farr 0.2.36
+
+* Added parquet-related functions: `load_parquet()` and `pg_to_parquet()`.
+* Added `gvkey_ciks` data.
+
+# farr 0.2.35
+
+* Added `cmsw_2018` data.
+* Fixes to documentation.
+
+# farr 0.2.34
+
+* Fixes to data and documentation.
+
+# farr 0.2.33
+
+* Updated tests.
+
+# farr 0.2.32
+
+* Removed duplicates from names data.
 
 # farr 0.2.30
 

@@ -3,9 +3,9 @@
 \docType{data}
 \name{state_hq}
 \alias{state_hq}
-\title{Data on firm headquarters based on SEC EDGAR filings.}
+\title{Data on firm headquarters based on SEC EDGAR filings}
 \format{
-A tibble with 24 rows and 3 variables:
+A tibble with 53,133 rows and 4 variables:
 \describe{
 \item{cik}{SEC's Central Index Key (CIK)}
 \item{ba_state}{Two-letter abbreviation of state}

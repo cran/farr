@@ -2,14 +2,14 @@
 % Please edit documentation in R/roc.R
 \name{ndcg}
 \alias{ndcg}
-\title{Calculate metric metric: NDCG at k}
+\title{Calculate metric: NDCG at k}
 \usage{
 ndcg(scores, response, k = 0.01)
 }
 \arguments{
 \item{scores}{Probability that response is true or 1.}
 
-\item{response}{Responses coded as logical or {0, 1}.}
+\item{response}{Responses coded as logical or 0-1.}
 
 \item{k}{Percentage to classify as TRUE or 1.}
 }
@@ -17,5 +17,5 @@ ndcg(scores, response, k = 0.01)
 vector including sensitivity and precision
 }
 \description{
-A function returning NDCG at k metric.
+A function returning NDCG-at-k metric.
 }

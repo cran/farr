@@ -3,9 +3,9 @@
 \docType{data}
 \name{iliev_2010}
 \alias{iliev_2010}
-\title{Data on public float.}
+\title{Data on public float}
 \format{
-A tibble with 7,213 and 9 variables:
+A tibble with 7,214 and 9 variables:
 \describe{
 \item{gvkey}{Compustat firm identifier (GVKEY)}
 \item{fyear}{Fiscal year}
@@ -17,6 +17,9 @@ A tibble with 7,213 and 9 variables:
 \item{af}{Indicator for accelerator filer}
 \item{cik}{SEC firm identifier (CIK)}
 }
+}
+\source{
+\doi{10.1111/j.1540-6261.2010.01564.x}
 }
 \usage{
 iliev_2010

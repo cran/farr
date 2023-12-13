@@ -3,13 +3,16 @@
 \docType{data}
 \name{bloomfield_2021}
 \alias{bloomfield_2021}
-\title{Firm-years in RDD analysis of Bloomfield (2021).}
+\title{Firm-years in RDD analysis of Bloomfield (2021)}
 \format{
 A tibble with 1,855 rows and 2 variables:
 \describe{
 \item{fyear}{Fiscal year}
 \item{permco}{CRSP firm identifier (PERMCO)}
 }
+}
+\source{
+\doi{10.1111/1475-679X.12346}
 }
 \usage{
 bloomfield_2021

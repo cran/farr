@@ -7,8 +7,8 @@
 <!-- badges: end -->
 
 The goal of farr is to provide functions and small data sets as used in
-[“Accounting Research: An Introductory
-Course”](http://iangow.me/far_book/).
+[“Empirical Research in Accounting: Tools and
+Methods”](https://iangow.github.io/far_book/).
 
 ## Installation
 
