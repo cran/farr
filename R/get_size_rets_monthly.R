@@ -11,15 +11,15 @@ read_data <- function(start, end) {
                     name_repair = fix_names,
                     show_col_types = FALSE) %>%
         dplyr::mutate(month = lubridate::ymd(paste0(.data$date, "01"))) %>%
-        dplyr::select(-.data$date) %>%
+        dplyr::select(-"date") %>%
         tidyr::pivot_longer(names_to = "quantile",
                             values_to = "ret",
-                            cols = -.data$month) %>%
+                            cols = -"month") %>%
         dplyr::mutate(ret = .data$ret / 100,
                       decile = dplyr::case_when(.data$quantile == "Hi 10" ~ "10",
                                                 .data$quantile == "Lo 10" ~ "1",
-                                                grepl("^Dec ", .data$quantile) ~
-                                                    sub("^Dec ", "", .data$quantile),
+                                                grepl("-Dec", .data$quantile) ~
+                                                    sub("-Dec", "", .data$quantile),
                                                 TRUE ~ NA_character_),
                       decile = as.integer(.data$decile)) %>%
         dplyr::filter(!is.na(.data$decile)) %>%
@@ -41,24 +41,24 @@ get_size_rets_monthly <- function() {
 
     # Determine breakpoints (lines) for different tables
     temp <- readr::read_lines("Portfolios_Formed_on_ME_CSV.zip")
-    vw_start <- grep("^\\s+Value Weight Returns -- Monthly", temp)
-    vw_end <- grep("^\\s+Equal Weight Returns -- Monthly", temp) - 4
+    vw_start <- grep("^\\s+Average Value Weight Returns -- Monthly", temp)
+    vw_end <-  grep("^\\s+Average Equal Weighted Returns -- Monthly", temp) - 4
 
-    ew_start <- grep("^\\s+Equal Weight Returns -- Monthly", temp)
+    ew_start <- grep("^\\s+Average Equal Weighted Returns -- Monthly", temp)
     ew_end <- grep("^\\s+Value Weight Returns -- Annual", temp) - 4
 
     vw_rets <-
         read_data(vw_start, vw_end) %>%
-        dplyr::rename(vw_ret = .data$ret)
+        dplyr::rename(vw_ret = "ret")
 
     ew_rets <-
         read_data(ew_start, ew_end) %>%
-        dplyr::rename(ew_ret = .data$ret)
+        dplyr::rename(ew_ret = "ret")
 
     size_rets <-
         ew_rets %>%
         dplyr::inner_join(vw_rets, by = c("month", "decile")) %>%
-        dplyr::select(.data$month, .data$decile, dplyr::everything())
+        dplyr::select("month", "decile", dplyr::everything())
 
     unlink("Portfolios_Formed_on_ME_CSV.zip")
 

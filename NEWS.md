@@ -1,4 +1,11 @@
-# farr 0.3.0
+# farr 0.3.2
+
+# farr 0.3.1
+
+# farr 0.3.1
+
+* Updated code to reflect changes in `tidyselect` package.
+* Updated code to reflect changes in Fama-French data.
 
 # farr 0.3.0
 
