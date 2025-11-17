@@ -1,12 +1,13 @@
 #' Create a table of with cut-offs for size portfolios
 #'
-#' @return tbl_df
+#' @param keep_max Set to `TRUE` to keep upper-bound of highest decile.
+#'   Default is `FALSE`, which will replace upper bound with `Inf`.
 #' @export
 #' @importFrom rlang .data
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' get_me_breakpoints() %>% filter(month == '2022-04-01')
-get_me_breakpoints <- function() {
+get_me_breakpoints <- function(keep_max = FALSE) {
     t <- tempfile(fileext = ".zip")
     url <- paste0("http://mba.tuck.dartmouth.edu",
                   "/pages/faculty/ken.french/ftp/",
@@ -35,10 +36,15 @@ get_me_breakpoints <- function() {
         dplyr::arrange(.data$decile) %>%
         dplyr::mutate(me_min = dplyr::coalesce(dplyr::lag(.data$cutoff), 0),
                       me_max = .data$cutoff) %>%
-        dplyr::mutate(me_max = dplyr::if_else(.data$decile == 10, Inf, .data$me_max)) %>%
         dplyr::select(-"cutoff") %>%
         dplyr::arrange(.data$month, .data$decile) %>%
         dplyr::ungroup()
 
+    if (!keep_max) {
+        me_breakpoints <-
+            me_breakpoints %>%
+            dplyr::mutate(me_max = dplyr::if_else(.data$decile == 10,
+                                                  Inf, .data$me_max))
+    }
     me_breakpoints
 }

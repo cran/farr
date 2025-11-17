@@ -4,10 +4,11 @@
 \alias{get_me_breakpoints}
 \title{Create a table of with cut-offs for size portfolios}
 \usage{
-get_me_breakpoints()
+get_me_breakpoints(keep_max = FALSE)
 }
-\value{
-tbl_df
+\arguments{
+\item{keep_max}{Set to \code{TRUE} to keep upper-bound of highest decile.
+Default is \code{FALSE}, which will replace upper bound with \code{Inf}.}
 }
 \description{
 Create a table of with cut-offs for size portfolios
