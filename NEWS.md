@@ -1,4 +1,6 @@
-# farr 1.0.0
+# farr 1.0.1
+* Added `duckdb_to_parquet()`.
+* Updated internet-dependent examples and tests so they do not run on CRAN.
 
 # farr 1.0.0
 * The are now no duplicates in `gvkey_ciks`.

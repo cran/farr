@@ -8,9 +8,9 @@
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#' ## Not run:
+#' \dontrun{
 #' get_ff_ind(5)
-#' ## End(Not run)
+#' }
 get_ff_ind <- function(ind) {
     t <- tempfile(fileext = ".zip")
     url <- stringr::str_c("http://mba.tuck.dartmouth.edu/pages/",

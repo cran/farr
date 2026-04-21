@@ -1,6 +1,6 @@
 Package: farr
 Title: Data and Code for Empirical Research in Accounting
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person(given = "Ian",
            family = "Gow",
@@ -23,8 +23,8 @@ Config/testthat/edition: 3
 Language: en-US
 URL: https://github.com/iangow/farr
 NeedsCompilation: no
-Packaged: 2025-11-17 14:41:59 UTC; igow
+Packaged: 2026-04-19 10:39:53 UTC; iangow
 Author: Ian Gow [aut, cre] (ORCID: <https://orcid.org/0000-0002-6243-8409>)
 Maintainer: Ian Gow <iandgow@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-11-17 21:51:14 UTC
+Date/Publication: 2026-04-21 10:52:26 UTC

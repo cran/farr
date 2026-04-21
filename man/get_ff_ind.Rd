@@ -16,7 +16,7 @@ tbl_df
 Fetch Fama-French industry grouping from Ken French's website.
 }
 \examples{
-## Not run:
+\dontrun{
 get_ff_ind(5)
-## End(Not run)
+}
 }
