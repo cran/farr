@@ -2,28 +2,63 @@
 % Please edit documentation in R/rusboost.R
 \name{rusboost}
 \alias{rusboost}
+\alias{predict.rusboost}
 \title{RUSBoost for two-class problems}
 \usage{
 rusboost(formula, df, size, ir = 1, learn_rate = 1, rus = TRUE, control)
+
+\method{predict}{rusboost}(object, newdata, type = "prob", ...)
 }
 \arguments{
 \item{formula}{A formula specify predictors and target variable. Target variable should be a factor of 0 and 1. Predictors can be either numerical and categorical.}
 
 \item{df}{A df frame used for training the model, i.e. training set.}
 
-\item{size}{Ensemble size, i.e. number of weak learners in the ensemble model}
+\item{size}{Positive integer giving the maximum number of weak-learner attempts.}
 
 \item{ir}{Imbalance ratio. Specifies how many times the under-sampled majority instances are over minority instances.}
 
-\item{learn_rate}{Default of 1.}
+\item{learn_rate}{Positive finite learning rate. Default of 1.}
 
 \item{rus}{TRUE for random undersampling; FALSE for AdaBoost with full sample}
 
 \item{control}{Control object passed onto rpart function.}
+
+\item{object}{A fitted \code{rusboost} object.}
+
+\item{newdata}{A data frame containing the predictors used in training.}
+
+\item{type}{Prediction type: \code{"prob"} for the weighted share of positive
+votes, or \code{"class"} for the sign of the weighted class vote.}
+
+\item{...}{Additional arguments; currently unused.}
 }
 \value{
-rusboost object
+\code{rusboost()} returns an object of class \code{rusboost}, a list
+containing fitted trees (\code{weakLearners}), their voting weights (\code{alpha}),
+observation-weight vectors (\code{w}), and the training \code{formula}.
+\code{predict()} returns a numeric vector of weighted positive-vote shares for
+\code{type = "prob"}, or classes -1 and 1 (0 for a tied vote) for \code{type = "class"}.
 }
 \description{
 RUSBoost for two-class problems.
+}
+\details{
+A learner that correctly classifies every observation in the full training
+data stops training successfully. It replaces any earlier learners and is
+returned as the sole predictive learner with voting weight 1, a finite
+representation of its limiting vote. Its observation-weight vector is the
+normalized vector used for that attempt.
+
+Learners with weighted error at least one half receive no vote. AdaBoost
+(\code{rus = FALSE}) stops at such a learner; RUSBoost skips it and tries another
+sample, up to \code{size} attempts. Training raises an error if no usable learner
+is found. The response must contain two nonmissing classes, including class 1.
+}
+\examples{
+training <- data.frame(x = 1:8, y = factor(c(rep(0, 4), rep(1, 4))))
+control <- rpart::rpart.control(minsplit = 2, minbucket = 1, cp = 0, xval = 0)
+fit <- rusboost(y ~ x, training, size = 3, rus = FALSE, control = control)
+predict(fit, training, type = "prob")
+predict(fit, training, type = "class")
 }

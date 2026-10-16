@@ -14,14 +14,17 @@
 
 #' Tags on StackOverflow
 #'
-#' A data set containing data on tagged questions on StackOverflow.
+#' Counts of Stack Overflow questions by tag and year, covering 2008--2018.
+#' A question can have multiple tags, so summing tag counts does not give
+#' the number of distinct questions. The annual total is repeated for each
+#' tag's row in a year.
 #'
 #' @format A tibble with 40,518 rows and 4 variables:
 #' \describe{
 #'   \item{year}{Year}
 #'   \item{tag}{Tag}
 #'   \item{number}{Number of questions with tag during year}
-#'   \item{year_total}{Total number of questions with tag during year}
+#'   \item{year_total}{Total number of questions across all tags during year}
 #' }
 "by_tag_year"
 
@@ -29,7 +32,18 @@
 #'
 #' A data set containing dates and descriptions for AAERs.
 #'
-#' @format A tibble with 2,920 rows and 4 variables:
+#' @details The SEC index was refreshed through October 8, 2026. Exact duplicate
+#' rows are removed; distinct entries sharing an AAER number are retained.
+#' Source-backed corrections retain November 16, 1999 for AAER-1209 and restore
+#' AAER-1470 dated October 23, 2001. Historical entries missing from the current
+#' index are preserved, including three intentionally omitted numbers with
+#' missing dates. The malformed historical identifier AAER-x2218 is replaced
+#' by AAER-2218. Raw snapshots, historical supplements, and the correction table
+#' with release links are maintained in `data-raw`; see also
+#' \href{https://github.com/iangow/farr/issues/27}{the refresh investigation}.
+#' Index dates have not all been checked against the underlying releases.
+#'
+#' @format A tibble with 3,386 rows and 4 variables:
 #' \describe{
 #'   \item{aaer_num}{AAER number}
 #'   \item{aaer_date}{Date}
@@ -171,7 +185,18 @@
 #'
 #' Data on public float of listed companies from Iliev (2010).
 #'
-#' @format A tibble with 7,214 and 9 variables:
+#' @details Five public-float dates have been corrected against the companies'
+#' Form 10-K cover pages: Spectrum Control (CIK 92769), fiscal year 2004, and
+#' Whitehall Jewellers (CIK 868984), fiscal years 2003--2006. These corrections
+#' replace four fractional values of `pfyear` and correct four months, with
+#' corresponding updates to `pfdate`. The original source CSV is preserved.
+#' The original values, corrected dates, and filing links are recorded in
+#' `data-raw/iliev_2010_date_corrections.csv` in the source repository; see also
+#' \href{https://github.com/iangow/farr/issues/28}{the investigation and filing evidence}.
+#' Other source anomalies, including invalid dates represented by missing
+#' values, remain in the data.
+#'
+#' @format A tibble with 7,214 rows and 9 variables:
 #' \describe{
 #'   \item{gvkey}{Compustat firm identifier (GVKEY)}
 #'   \item{fyear}{Fiscal year}
@@ -413,7 +438,7 @@
 #'
 #' Link table from GVKEYs to CIKs
 #'
-#' @format A tibble with 48,517 rows and 5 variables:
+#' @format A tibble with 49,089 rows and 5 variables:
 #' \describe{
 #'   \item{gvkey}{GVKEY (Compustat firm identifier)}
 #'   \item{iid}{Issue ID}

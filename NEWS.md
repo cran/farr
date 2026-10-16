@@ -1,3 +1,41 @@
+# farr 1.1.0
+* Expanded runnable examples and return-value documentation, documented the
+  prediction method for `rusboost()` objects, and clarified which examples
+  require internet access or database credentials.
+* `get_size_rets_monthly()` now downloads over HTTPS to a temporary file,
+  removes it even on failure, and restores `VROOM_CONNECTION_SIZE` after parsing
+  instead of changing the caller's files or environment (#33).
+* `rusboost()` now retains a perfect learner as the sole predictive learner
+  with weight 1 and reports an error if no usable learner is fitted (#32).
+  Random undersampling handles singleton classes safely and validates class
+  counts and majority sample sizes.
+* Monthly cumulative-return windows now include the full ending month for
+  nonzero offsets, including transitions from shorter to longer months.
+* Daily and monthly cumulative event returns now handle complete losses
+  (`ret = -1`) in stocks and benchmarks (#31). Missing-value handling is
+  unchanged, and returns below -1 continue to raise an error.
+* `get_event_rets()` now retains non-trading-day announcements (#30),
+  measuring relative trading days from the next trading day while keeping
+  the original announcement dates.
+* Corrected `get_got_data()` to use `rho_E` for firm-specific error
+  persistence (#29). Simulations with unequal `rho_X` and `rho_E` now
+  follow the requested error process; equal-parameter results are unchanged.
+* Refreshed `aaer_dates` through October 2026, with 3,386 rows. The data steps
+  apply source-backed date and coverage corrections, preserve historical
+  entries absent from the current SEC index, and remove exact duplicates (#27).
+* Corrected five public-float dates in `iliev_2010` using the original 10-Ks,
+  including four fractional years. The original CSV is preserved, with an
+  explicit correction table and filing references in `data-raw` (#28).
+* Corrected tree weights in `predict.rusboost(type = "prob")` (#26), including
+  predictions for a single observation or weak learner. Probability predictions
+  require finite, nonnegative weights with a positive finite total.
+* Corrected the `by_tag_year` documentation: `year_total` counts questions
+  across all tags in a year, rather than questions with a specific tag.
+* `get_ff_ind()` now caches downloaded Fama-French industry zip files by
+  default and supports `refresh_cache = TRUE`.
+* Added a pkgdown site with Bootstrap 5 styling, a dark-mode toggle, and a
+  Quarto article scaffold.
+
 # farr 1.0.1
 * Added `duckdb_to_parquet()`.
 * Updated internet-dependent examples and tests so they do not run on CRAN.

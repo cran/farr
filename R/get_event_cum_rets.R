@@ -12,21 +12,23 @@
 #' events
 #' @param suffix Text to be appended after "ret" in variable names
 #'
-#' @return tbl_df
+#' @return A tibble with one row per security and event window, containing
+#'   `ret_raw` (compounded stock return), `ret_mkt` (stock minus market return),
+#'   and `ret_sz` (stock minus size-portfolio return). Returns are decimal
+#'   fractions; `suffix` is inserted after `ret` in these column names.
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#' ## Not run:
 #' \dontrun{
-#' library(DBI)
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(RPostgres)
-#' pg <- dbConnect(Postgres())
-#' events <- tibble(permno = c(14593L, 10107L),
-#'                  event_date = as.Date(c("2019-01-31", "2019-01-31")))
-#' get_event_cum_rets(events, pg)
+#' # Requires an authenticated PostgreSQL connection with access to CRSP data.
+#' local({
+#'   pg <- DBI::dbConnect(RPostgres::Postgres())
+#'   on.exit(DBI::dbDisconnect(pg), add = TRUE)
+#'   events <- data.frame(permno = c(14593L, 10107L),
+#'                         event_date = as.Date(c("2019-01-31", "2019-01-31")))
+#'   get_event_cum_rets(events, pg, win_start = -1, win_end = 1)
+#' })
 #' }
-#' ## End(Not run)
 get_event_cum_rets <- function(data, conn,
                                permno = "permno",
                                event_date = "event_date",
@@ -132,15 +134,14 @@ get_event_cum_rets <- function(data, conn,
         dplyr::group_by(dplyr::across(dplyr::all_of(c("permno",
                                                       !!event_date,
                                                       !!end_event_date)))) %>%
-        dplyr::summarize(ret_raw =
-                      exp(sum(dplyr::sql("ln((1 + ret))"), na.rm = TRUE)) - 1,
-                  ret_mkt =
-                      exp(sum(dplyr::sql("ln((1 + ret))"), na.rm = TRUE)) -
-                      exp(sum(dplyr::sql("ln((1 + vwretd))"), na.rm = TRUE)) ,
-                  ret_sz =
-                      exp(sum(dplyr::sql("ln((1 + ret))"), na.rm = TRUE)) -
-                      exp(sum(dplyr::sql("ln((1 + decret))"), na.rm = TRUE)),
-                  .groups = "drop") %>%
+        dplyr::summarize(gross_ret = !!gross_return_sql("ret"),
+                          gross_mkt = !!gross_return_sql("vwretd"),
+                          gross_sz = !!gross_return_sql("decret"),
+                          .groups = "drop") %>%
+        dplyr::mutate(ret_raw = .data$gross_ret - 1,
+                       ret_mkt = .data$gross_ret - .data$gross_mkt,
+                       ret_sz = .data$gross_ret - .data$gross_sz) %>%
+        dplyr::select(-"gross_ret", -"gross_mkt", -"gross_sz") %>%
         dplyr::collect() %>%
         dplyr::rename_with(function(x) gsub("^ret", paste0("ret", suffix), x),
                            dplyr::one_of(c("ret_raw", "ret_mkt", "ret_sz")))

@@ -10,21 +10,22 @@
 #' @param win_end integer representing start of trading window (e.g., 1)
 #' @param end_event_date string representing column containing ending dates for events
 #'
-#' @return tbl_df
+#' @return A tibble containing security and event dates, trading dates, stock
+#'   returns (`ret`), benchmark returns (`vwretd` and `decret`), window boundaries,
+#'   and `relative_td` (trading days from the mapped announcement date).
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#' ## Not run:
 #' \dontrun{
-#' library(DBI)
-#' library(dplyr, warn.conflicts = FALSE)
-#' pg <- dbConnect(RPostgres::Postgres())
-#' events <- tibble(permno = c(14593L, 10107L),
-#'                  event_date = as.Date(c("2019-01-31", "2019-01-31")))
-#' get_event_rets(events, pg, win_start = -3, win_end = +3) %>%
-#'   select(permno, event_date, date, ret)
+#' # Requires an authenticated PostgreSQL connection with access to CRSP data.
+#' local({
+#'   pg <- DBI::dbConnect(RPostgres::Postgres())
+#'   on.exit(DBI::dbDisconnect(pg), add = TRUE)
+#'   events <- data.frame(permno = c(14593L, 10107L),
+#'                         event_date = as.Date(c("2019-01-31", "2019-01-31")))
+#'   get_event_rets(events, pg, win_start = -1, win_end = 1)
+#' })
 #' }
-#' ## End(Not run)
 get_event_rets <- function(data, conn,
                            permno = "permno",
                            event_date = "event_date",
@@ -119,13 +120,15 @@ get_event_rets <- function(data, conn,
 
     trading_dates <- farr::get_trading_dates(conn)
 
+    # Day zero is the mapped announcement date, independent of window offsets.
     event_tds <-
         event_dates %>%
         dplyr::collect() %>%
-        dplyr::inner_join(trading_dates,
-                          by = structure(names = event_date, .Data = "date")) %>%
+        dplyr::inner_join(farr::get_annc_dates(conn),
+                          by = structure(names = event_date, .Data = "annc_date")) %>%
         dplyr::rename(event_td = "td") %>%
-        dplyr::select("permno", .data[[event_date]], "event_td")
+        dplyr::select("permno", dplyr::all_of(event_date), "event_td") %>%
+        dplyr::distinct()
 
     results <-
         results_raw %>%

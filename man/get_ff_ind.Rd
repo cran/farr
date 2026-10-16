@@ -4,19 +4,33 @@
 \alias{get_ff_ind}
 \title{Fetch Fama-French industry grouping.}
 \usage{
-get_ff_ind(ind)
+get_ff_ind(ind, refresh_cache = FALSE)
 }
 \arguments{
 \item{ind}{Fama-French industry grouping (e.g., 11, 48)}
+
+\item{refresh_cache}{If \code{TRUE}, re-download the underlying zip file even if
+a cached copy is available.}
 }
 \value{
-tbl_df
+A tibble with industry identifiers (\code{ff_ind}), short and long
+descriptions (\code{ff_ind_short_desc}, \code{ff_ind_desc}), SIC interval endpoints
+(\code{sic_min}, \code{sic_max}), and SIC interval descriptions (\code{sic_desc}).
 }
 \description{
 Fetch Fama-French industry grouping from Ken French's website.
 }
 \examples{
-\dontrun{
-get_ff_ind(5)
+\donttest{
+# Downloads an industry classification from Ken French's website.
+local({
+  cache_dir <- tempfile("farr-example-cache-")
+  old_options <- options(farr.cache_dir = cache_dir)
+  on.exit({
+    options(old_options)
+    unlink(cache_dir, recursive = TRUE)
+  }, add = TRUE)
+  head(get_ff_ind(5))
+})
 }
 }
