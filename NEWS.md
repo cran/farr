@@ -1,3 +1,7 @@
+# farr 1.1.1
+* Cumulative event returns explicitly reject returns below -1 in DuckDB,
+  including DuckDB 2.0 with `ieee_floating_point_ops` enabled (#34).
+
 # farr 1.1.0
 * Expanded runnable examples and return-value documentation, documented the
   prediction method for `rusboost()` objects, and clarified which examples
@@ -38,6 +42,8 @@
 
 # farr 1.0.1
 * Added `duckdb_to_parquet()`.
+* Fixed the lazy table returned by `duckdb_to_parquet()` by removing the
+  `dbplyr::sql()` wrapper around `read_parquet()`.
 * Updated internet-dependent examples and tests so they do not run on CRAN.
 
 # farr 1.0.0
